@@ -1,1 +1,1 @@
-include ':middlelinesdialogutils'
+include ':dialog-example', ':middlelinesdialogutilslib'
