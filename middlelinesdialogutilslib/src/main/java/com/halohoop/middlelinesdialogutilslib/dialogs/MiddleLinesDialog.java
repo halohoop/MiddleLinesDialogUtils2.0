@@ -66,73 +66,73 @@ public class MiddleLinesDialog extends Dialog implements
      * 使用默认的圆角和margin
      *
      * @param context
-     * @param itemClickListener
+     * @param actionClickListener
      * @param texts
      */
-    public MiddleLinesDialog(int resIdDialogBelongTo, Context context, ItemClickListener itemClickListener,
+    public MiddleLinesDialog(int resIdDialogBelongTo, Context context, ActionClickListener actionClickListener,
                              String... texts) {
         this(resIdDialogBelongTo, context,
                 DEFAULT_MARGIN_LEFT_AND_RIGHT, DEFAULT_ITEM_PADDING_TOP_AND_DOWN,
                 DEFAULT_RADOIS, DEFAULT_RADOIS,
-                itemClickListener,
-                null, texts);
+                actionClickListener,
+                texts);
     }
 
     public MiddleLinesDialog(int resIdDialogBelongTo, Context context,
                              int marginLeftAndRight,
-                             ItemClickListener itemClickListener,
+                             ActionClickListener actionClickListener,
                              String... texts) {
         this(resIdDialogBelongTo, context,
                 marginLeftAndRight, DEFAULT_ITEM_PADDING_TOP_AND_DOWN,
                 DEFAULT_RADOIS, DEFAULT_RADOIS,
-                itemClickListener,
-                null, texts);
+                actionClickListener,
+                texts);
     }
 
     public MiddleLinesDialog(int resIdDialogBelongTo, Context context,
                              int marginLeftAndRight, int itemPaddingTopAndDown,
-                             ItemClickListener itemClickListener,
+                             ActionClickListener actionClickListener,
                              String... texts) {
         this(resIdDialogBelongTo, context,
                 marginLeftAndRight, itemPaddingTopAndDown,
                 DEFAULT_RADOIS, DEFAULT_RADOIS,
-                itemClickListener,
-                null, texts);
+                actionClickListener,
+                texts);
     }
 
     public MiddleLinesDialog(int resIdDialogBelongTo, Context context,
                              int marginLeftAndRight, int itemPaddingTopAndDown, int radius,
-                             ItemClickListener itemClickListener,
+                             ActionClickListener actionClickListener,
                              String... texts) {
         this(resIdDialogBelongTo, context,
                 marginLeftAndRight, itemPaddingTopAndDown,
                 radius, radius,
-                itemClickListener,
-                null, texts);
+                actionClickListener,
+                texts);
     }
 
     public MiddleLinesDialog(int resIdDialogBelongTo, Context context, int marginLeftAndRight, int itemPaddingTopAndDown,
                              int topLeftAndRightRadius, int bottomLeftAndRightRadius,
-                             ItemClickListener itemClickListener,
-                             OnCancelListener cancelListener, String... texts) {
+                             ActionClickListener actionClickListener,
+                             String... texts) {
         this(resIdDialogBelongTo, context, marginLeftAndRight, itemPaddingTopAndDown,
                 topLeftAndRightRadius, bottomLeftAndRightRadius,
                 DEFAULT_CROSS_MARGIN_LEFT_AND_RIGHT,
-                itemClickListener,
-                cancelListener, texts);
+                actionClickListener,
+                texts);
     }
 
     public MiddleLinesDialog(int resIdDialogBelongTo, Context context, int marginLeftAndRight, int itemPaddingTopAndDown,
                              int topLeftAndRightRadius, int bottomLeftAndRightRadius,
                              int crossMarginLeftAndRight,
-                             ItemClickListener itemClickListener,
-                             OnCancelListener cancelListener, String... texts) {
+                             ActionClickListener actionClickListener,
+                             String... texts) {
         this(resIdDialogBelongTo, context, marginLeftAndRight, itemPaddingTopAndDown,
                 topLeftAndRightRadius, bottomLeftAndRightRadius,
                 crossMarginLeftAndRight,
                 DEFAULT_DIALOG_BG_ALPHA, DEFAULT_DIALOG_BG_COLOR_HEX,
-                itemClickListener,
-                cancelListener, texts);
+                actionClickListener,
+                texts);
     }
 
     /**
@@ -144,23 +144,22 @@ public class MiddleLinesDialog extends Dialog implements
      * @param crossMarginLeftAndRight
      * @param dialogBgAlpha            dialog bg alpha eg.0.70f
      * @param dialogBgColorHex         dialog bgcolor hex,对话框背景颜色,eg.ff0000
-     * @param itemClickListener
-     * @param cancelListener
+     * @param actionClickListener
      * @param texts
      */
     public MiddleLinesDialog(int resIdDialogBelongTo, Context context, int marginLeftAndRight, int itemPaddingTopAndDown,
                              int topLeftAndRightRadius, int bottomLeftAndRightRadius,
                              int crossMarginLeftAndRight,
                              float dialogBgAlpha, String dialogBgColorHex,
-                             ItemClickListener itemClickListener,
-                             OnCancelListener cancelListener, String... texts) {
+                             ActionClickListener actionClickListener,
+                             String... texts) {
         this(resIdDialogBelongTo, context, marginLeftAndRight, itemPaddingTopAndDown,
                 topLeftAndRightRadius, bottomLeftAndRightRadius,
                 crossMarginLeftAndRight,
                 dialogBgAlpha, dialogBgColorHex,
                 DEFAULT_CROSS_COLOR_ALPHA, DEFAULT_CROSS_COLOR_HEX,
-                itemClickListener,
-                cancelListener, texts);
+                actionClickListener,
+                texts);
     }
 
     /**
@@ -174,8 +173,7 @@ public class MiddleLinesDialog extends Dialog implements
      * @param dialogBgColorHex         dialog bgcolor hex,对话框背景颜色,eg.ff0000
      * @param crossColorAlpha          cross color alpha eg.0.70f
      * @param crossColorHex            cross color hex,分割线背景颜色,eg.8e8e8e
-     * @param itemClickListener
-     * @param cancelListener
+     * @param actionClickListener
      * @param texts
      */
     public MiddleLinesDialog(int resIdDialogBelongTo, Context context, int marginLeftAndRight, int itemPaddingTopAndDown,
@@ -183,20 +181,19 @@ public class MiddleLinesDialog extends Dialog implements
                              int crossMarginLeftAndRight,
                              float dialogBgAlpha, String dialogBgColorHex,
                              float crossColorAlpha, String crossColorHex,
-                             ItemClickListener itemClickListener,
-                             OnCancelListener cancelListener, String... texts) {
+                             ActionClickListener actionClickListener,
+                             String... texts) {
         this(resIdDialogBelongTo, context, marginLeftAndRight, itemPaddingTopAndDown,
                 topLeftAndRightRadius, bottomLeftAndRightRadius,
                 crossMarginLeftAndRight,
                 dialogBgAlpha, dialogBgColorHex,
                 crossColorAlpha, crossColorHex,
                 DEFAULT_TEXT_COLOR_ALPHA, DEFAULT_TEXT_COLOR_HEX,
-                itemClickListener,
-                cancelListener, texts);
+                actionClickListener,
+                texts);
     }
 
     /**
-     *
      * @param context
      * @param marginLeftAndRight
      * @param itemPaddingTopAndDown
@@ -209,8 +206,7 @@ public class MiddleLinesDialog extends Dialog implements
      * @param crossColorHex
      * @param textColorAlpha
      * @param textColorHex
-     * @param itemClickListener
-     * @param cancelListener
+     * @param actionClickListener
      * @param texts
      */
     public MiddleLinesDialog(int resIdDialogBelongTo, Context context, int marginLeftAndRight, int itemPaddingTopAndDown,
@@ -219,8 +215,8 @@ public class MiddleLinesDialog extends Dialog implements
                              float dialogBgAlpha, String dialogBgColorHex,
                              float crossColorAlpha, String crossColorHex,
                              float textColorAlpha, String textColorHex,
-                             ItemClickListener itemClickListener,
-                             OnCancelListener cancelListener, String... texts) {
+                             ActionClickListener actionClickListener,
+                             String... texts) {
         this(resIdDialogBelongTo, context, marginLeftAndRight, itemPaddingTopAndDown,
                 topLeftAndRightRadius, bottomLeftAndRightRadius,
                 crossMarginLeftAndRight,
@@ -228,8 +224,8 @@ public class MiddleLinesDialog extends Dialog implements
                 crossColorAlpha, crossColorHex,
                 textColorAlpha, textColorHex,
                 Gravity.CENTER, 0,
-                itemClickListener,
-                cancelListener, texts);
+                actionClickListener,
+                texts);
     }
 
     /**
@@ -250,8 +246,7 @@ public class MiddleLinesDialog extends Dialog implements
      * @param itemGravity              这个参数指定了对话框每行TextView的Gravity,传入LEFT,RIGHT或者CENTER
      * @param paddingLeftOrRight       这个参数和上个参数配对使用,当时CENTER的时候无效,
      *                                 当是LEFT的时候就是paddingLeft,当是RIGHT的时候就是paddingRight
-     * @param itemClickListener        点击的其中一行TextView监听器接口
-     * @param cancelListener           取消对话框的监听器接口
+     * @param actionClickListener      点击的其中一行TextView监听器接口
      * @param texts                    自定义的文字,不定参数,需要什么通过:"xxxx1","xxxx2","xxxx3","xxxxN"...往后加
      *                                 而且这个参数必须要在最后,因为是不定参数;
      */
@@ -262,9 +257,9 @@ public class MiddleLinesDialog extends Dialog implements
                              float crossColorAlpha, String crossColorHex,
                              float textColorAlpha, String textColorHex,
                              int itemGravity, int paddingLeftOrRight,
-                             ItemClickListener itemClickListener,
-                             OnCancelListener cancelListener, String... texts) {
-        super(context, true, cancelListener);
+                             ActionClickListener actionClickListener,
+                             String... texts) {
+        super(context, true, actionClickListener);
         this.mResIdDialogBelongTo = resIdDialogBelongTo;
         this.mContext = context;
         mScreenSize = getScreenSize(context);
@@ -329,7 +324,7 @@ public class MiddleLinesDialog extends Dialog implements
         }
         List<String> strings = Arrays.asList(texts);
         tvTextList.addAll(strings);
-        this.itemClickListener = itemClickListener;
+        this.mActionClickListener = actionClickListener;
     }
 
     @Override
@@ -379,7 +374,7 @@ public class MiddleLinesDialog extends Dialog implements
             textView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    itemClickListener.onClick(position, mResIdDialogBelongTo);
+                    mActionClickListener.onClick(position, mResIdDialogBelongTo);
                     dismiss();
                 }
             });
@@ -609,7 +604,13 @@ public class MiddleLinesDialog extends Dialog implements
         return out;
     }
 
-    private ItemClickListener itemClickListener;
+    private ActionClickListener mActionClickListener;
+
+    @Override
+    public void dismiss() {
+        super.dismiss();
+        this.mActionClickListener.onClose(mResIdDialogBelongTo);
+    }
 
     private MiddleLinesDialog(Context context) {
         super(context);
@@ -619,6 +620,12 @@ public class MiddleLinesDialog extends Dialog implements
     private MiddleLinesDialog(Context context, int themeResId) {
         super(context, themeResId);
         this.mContext = context;
+    }
+
+    @Override
+    public void cancel() {
+        super.cancel();
+        this.mActionClickListener.onCancel(this, mResIdDialogBelongTo);
     }
 
     private MiddleLinesDialog(Context context, boolean cancelable, OnCancelListener cancelListener) {
