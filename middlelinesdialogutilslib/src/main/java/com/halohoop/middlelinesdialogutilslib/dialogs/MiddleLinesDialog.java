@@ -70,6 +70,7 @@ public class MiddleLinesDialog extends Dialog {
     private int mNeedTopLeftAndRightRadusIndexMark;
 
     //----------------------↓--------------------------
+
     /**
      * 这个构造函数的文字参数,由外界传入,采用的是不定参数的形式,其实就是一个数组,
      * 使用默认的圆角和margin
@@ -455,9 +456,14 @@ public class MiddleLinesDialog extends Dialog {
         tvTextList.addAll(strings);
         this.mActionClickListener = actionClickListener;
         if (waitingToShowMark != null) {
+            if (tvTextList.size() <= 1) {
+                throw new IllegalArgumentException("One line dialog don't need to use waitingToShowMark!");
+            }
             this.mWaitingToShowMark = waitingToShowMark;
             mViewWaitingToShow = new HashMap<>();
             mCrossViewWaitingToShow = new HashMap<>();
+        } else {
+            throw new IllegalArgumentException("please pass a not null waitingToShowMark!");
         }
     }
 
