@@ -16,7 +16,7 @@ Feel free and help yourself!
 ![Markdown](http://i4.piimg.com/8359/5bfc4381d23f0d35.jpg)
 ## 
 # Usage
-* compile 'com.halohoop:middlelinesdialogutilslib:2.0.1'
+* compile 'com.halohoop:middlelinesdialogutilslib:2.0.3'
 <pre><code>
         //使用示例,一行代码一句对话框,示例示例示例示例示例,参数越多,越多自定义
         //sample to use,use just one line of code to open a dialog;
@@ -93,7 +93,7 @@ To customize dialog style:
   * Android GINGERBREAD 2.3+
 
 # Changelog
-### Version: 2.0.1
+### Version: 2.0.3
 
   * update:to show serveral line when sth is done is non-ui thread; 
 
