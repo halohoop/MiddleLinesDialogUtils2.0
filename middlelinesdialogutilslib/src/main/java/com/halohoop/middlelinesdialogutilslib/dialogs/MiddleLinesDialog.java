@@ -1,5 +1,6 @@
 package com.halohoop.middlelinesdialogutilslib.dialogs;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Point;
@@ -22,13 +23,14 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Pooholah on 2016/7/15.
  */
-public class MiddleLinesDialog extends Dialog implements
-        View.OnClickListener {
+public class MiddleLinesDialog extends Dialog {
     private LinearLayout mLinearLayout;
     private static final int DEFAULT_MARGIN_LEFT_AND_RIGHT = 100;
     private static final int DEFAULT_ITEM_PADDING_TOP_AND_DOWN = 30;
@@ -60,7 +62,14 @@ public class MiddleLinesDialog extends Dialog implements
     private Point mScreenSize;
     private List<String> tvTextList = new ArrayList<>();
     private int mResIdDialogBelongTo;
+    private int[] mWaitingToShowMark;
+    private Map<String, View> mViewWaitingToShow;
+    private Map<String, View> mCrossViewWaitingToShow;
+    private List<TextView> mTextViewList = new ArrayList<>();
+    private int mNeedBottomLeftAndRightRadusIndexMark;
+    private int mNeedTopLeftAndRightRadusIndexMark;
 
+    //----------------------↓--------------------------
     /**
      * 这个构造函数的文字参数,由外界传入,采用的是不定参数的形式,其实就是一个数组,
      * 使用默认的圆角和margin
@@ -77,6 +86,25 @@ public class MiddleLinesDialog extends Dialog implements
                 actionClickListener,
                 texts);
     }
+
+    /**
+     * 这个构造函数的文字参数,由外界传入,采用的是不定参数的形式,其实就是一个数组,
+     * 使用默认的圆角和margin
+     *
+     * @param context
+     * @param actionClickListener
+     * @param texts
+     */
+    public MiddleLinesDialog(int resIdDialogBelongTo, Context context, ActionClickListener actionClickListener,
+                             int[] waitingToShowMark,
+                             String... texts) {
+        this(resIdDialogBelongTo, context,
+                DEFAULT_MARGIN_LEFT_AND_RIGHT, DEFAULT_ITEM_PADDING_TOP_AND_DOWN,
+                DEFAULT_RADOIS, DEFAULT_RADOIS,
+                actionClickListener,
+                texts);
+    }
+    //----------------------↑--------------------------
 
     public MiddleLinesDialog(int resIdDialogBelongTo, Context context,
                              int marginLeftAndRight,
@@ -121,6 +149,7 @@ public class MiddleLinesDialog extends Dialog implements
                 actionClickListener,
                 texts);
     }
+
 
     public MiddleLinesDialog(int resIdDialogBelongTo, Context context, int marginLeftAndRight, int itemPaddingTopAndDown,
                              int topLeftAndRightRadius, int bottomLeftAndRightRadius,
@@ -327,6 +356,172 @@ public class MiddleLinesDialog extends Dialog implements
         this.mActionClickListener = actionClickListener;
     }
 
+    /**
+     * 越多参数的构造函数能够实现越多的自定义
+     *
+     * @param context
+     * @param marginLeftAndRight       这个参数指定了对话框相对于父布局的marginLeft 和 marginRight
+     * @param itemPaddingTopAndDown    这个参数指定了对话框每一行TextView的paddingTop和paddingBottom
+     * @param topLeftAndRightRadius    这个参数指定了对话框上左和上右的圆角值
+     * @param bottomLeftAndRightRadius 这个参数指定了对话框下左和下右的圆角值
+     * @param crossMarginLeftAndRight  这个参数指定了对话框每一行TextView之间的分割线的marginLeft 和 marginRight
+     * @param dialogBgAlpha            这个参数指定了对话框背景颜色的透明度
+     * @param dialogBgColorHex         这个参数指定了对话框背景颜色的十六进制代码
+     * @param crossColorAlpha          这个参数指定了对话框分割线的颜色的透明度
+     * @param crossColorHex            这个参数指定了对话框分割线的颜色的十六进制代码
+     * @param textColorAlpha           这个参数指定了对话框每行文字的颜色的透明度
+     * @param textColorHex             这个参数指定了对话框每行文字的颜色的十六进制代码
+     * @param itemGravity              这个参数指定了对话框每行TextView的Gravity,传入LEFT,RIGHT或者CENTER
+     * @param paddingLeftOrRight       这个参数和上个参数配对使用,当时CENTER的时候无效,
+     *                                 当是LEFT的时候就是paddingLeft,当是RIGHT的时候就是paddingRight
+     * @param actionClickListener      点击的其中一行TextView监听器接口
+     * @param texts                    自定义的文字,不定参数,需要什么通过:"xxxx1","xxxx2","xxxx3","xxxxN"...往后加
+     *                                 而且这个参数必须要在最后,因为是不定参数;
+     */
+    public MiddleLinesDialog(int resIdDialogBelongTo, Context context, int marginLeftAndRight, int itemPaddingTopAndDown,
+                             int topLeftAndRightRadius, int bottomLeftAndRightRadius,
+                             int crossMarginLeftAndRight,
+                             float dialogBgAlpha, String dialogBgColorHex,
+                             float crossColorAlpha, String crossColorHex,
+                             float textColorAlpha, String textColorHex,
+                             int itemGravity, int paddingLeftOrRight,
+                             ActionClickListener actionClickListener,
+                             int[] waitingToShowMark,
+                             String... texts) {
+        super(context, true, actionClickListener);
+        this.mResIdDialogBelongTo = resIdDialogBelongTo;
+        this.mContext = context;
+        mScreenSize = getScreenSize(context);
+        this.mMarginLeftAndRight = marginLeftAndRight;
+        this.mCrossMarginLeftAndRight = crossMarginLeftAndRight;
+        this.mItemPaddingTopAndDown = itemPaddingTopAndDown;
+        this.mTopLeftAndRightRadius = topLeftAndRightRadius;
+        this.mBottomLeftAndRightRadius = bottomLeftAndRightRadius;
+        if (dialogBgAlpha > 1.0f || dialogBgAlpha < 0.0f) {
+            throw new IllegalArgumentException("please pass a right dialogBgAlpha " +
+                    "float value between 0.00 - 1.00");
+        }
+        this.mDialogBgAlpha = dialogBgAlpha;
+        if (TextUtils.isEmpty(dialogBgColorHex)) {
+            throw new IllegalArgumentException("please pass a right ColorHex");
+        } else {
+            if (dialogBgColorHex.length() != 6 ||
+                    dialogBgColorHex.startsWith("#")) {
+                throw new IllegalArgumentException("please pass a right ColorHex without #alpha");
+            }
+        }
+        this.mDialogBgColorHex = dialogBgColorHex;
+
+        if (crossColorAlpha > 1.0f || crossColorAlpha < 0.0f) {
+            throw new IllegalArgumentException("please pass a right crossColorAlpha " +
+                    "float value between 0.00 - 1.00");
+        }
+        this.mCrossColorAlpha = crossColorAlpha;
+        if (TextUtils.isEmpty(crossColorHex)) {
+            throw new IllegalArgumentException("please pass a right ColorHex");
+        } else {
+            if (crossColorHex.length() != 6 ||
+                    crossColorHex.startsWith("#")) {
+                throw new IllegalArgumentException("please pass a right ColorHex without #alpha");
+            }
+        }
+        this.mCrossColorHex = crossColorHex;
+
+        if (textColorAlpha > 1.0f || textColorAlpha < 0.0f) {
+            throw new IllegalArgumentException("please pass a right crossColorAlpha " +
+                    "float value between 0.00 - 1.00");
+        }
+        this.mTextColorAlpha = textColorAlpha;
+        if (itemGravity != Gravity.CENTER && itemGravity != Gravity.LEFT && itemGravity != Gravity.RIGHT) {
+            throw new IllegalArgumentException("please pass a Gravity between " +
+                    "Gravity.CENTER,Gravity.LEFT and Gravity.RIGHT");
+        }
+        this.mItemGravity = itemGravity;
+        this.mPaddingLeftOrRight = dip2px(context, paddingLeftOrRight);
+        if (TextUtils.isEmpty(crossColorHex)) {
+            throw new IllegalArgumentException("please pass a right ColorHex");
+        } else {
+            if (textColorHex.length() != 6 ||
+                    textColorHex.startsWith("#")) {
+                throw new IllegalArgumentException("please pass a right ColorHex without #alpha");
+            }
+        }
+        this.mTextColorHex = textColorHex;
+
+        if (texts == null || texts.length == 0) {
+            throw new IllegalArgumentException("please pass a not null texts");
+        }
+        List<String> strings = Arrays.asList(texts);
+        tvTextList.addAll(strings);
+        this.mActionClickListener = actionClickListener;
+        if (waitingToShowMark != null) {
+            this.mWaitingToShowMark = waitingToShowMark;
+            mViewWaitingToShow = new HashMap<>();
+            mCrossViewWaitingToShow = new HashMap<>();
+        }
+    }
+
+    public void showItem(int lineIndex) {
+        Activity act = (Activity) mContext;
+        final View view1 = mCrossViewWaitingToShow.get(lineIndex + "");
+        final View view2 = mViewWaitingToShow.get(lineIndex + "");
+        if (view1 != null) {
+            act.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    view1.setVisibility(View.VISIBLE);
+                }
+            });
+        }
+        if (view2 != null) {
+            act.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    view2.setVisibility(View.VISIBLE);
+                }
+            });
+        }
+        //------------------
+        act.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                resetTheSelector();
+            }
+        });
+    }
+
+    private void resetTheSelector() {
+        for (int i = mTextViewList.size() - 1; i >= 0; i--) {
+            if (mTextViewList.get(i).getVisibility() == View.VISIBLE) {
+                mNeedTopLeftAndRightRadusIndexMark = i;
+            }
+        }
+        for (int i = 0; i < mTextViewList.size(); i++) {
+            if (mTextViewList.get(i).getVisibility() == View.VISIBLE) {
+                mNeedBottomLeftAndRightRadusIndexMark = i;
+            }
+        }
+        int size = mTextViewList.size();
+        for (int i = 0; i < size; i++) {
+            TextView textView = mTextViewList.get(i);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                textView.setBackground(newSelector(
+                        android.R.color.transparent,
+                        getColorByHexStr(mMiddleLinesDiaglogPressColorStr),
+                        android.R.color.transparent,
+                        android.R.color.transparent,
+                        i));
+            } else {
+                textView.setBackgroundDrawable(newSelector(
+                        android.R.color.transparent,
+                        getColorByHexStr(mMiddleLinesDiaglogPressColorStr),
+                        android.R.color.transparent,
+                        android.R.color.transparent,
+                        i));
+            }
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -370,6 +565,7 @@ public class MiddleLinesDialog extends Dialog implements
         for (int i = 0; i < tvTextList.size(); i++) {
             String text = tvTextList.get(i);
             TextView textView = createTextView(text, i, tvTextList.size(), mItemGravity);
+            mTextViewList.add(textView);
             final int position = i;
             textView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -379,10 +575,32 @@ public class MiddleLinesDialog extends Dialog implements
                 }
             });
             mLinearLayout.addView(textView);
+            if (mWaitingToShowMark != null) {
+                for (int j = 0; j < mWaitingToShowMark.length; j++) {
+                    if (mWaitingToShowMark[j] == i) {
+                        textView.setVisibility(View.GONE);
+                        mViewWaitingToShow.put(i + "", textView);
+                        break;
+                    }
+                }
+            }
             if (i < tvTextList.size() - 1) {//非最后一个
-                mLinearLayout.addView(createCrossLine());
+                View crossLine = createCrossLine();
+                mLinearLayout.addView(crossLine);
+                if (mWaitingToShowMark != null) {
+                    for (int j = 0; j < mWaitingToShowMark.length; j++) {
+                        if (mWaitingToShowMark[j] == i) {
+                            crossLine.setVisibility(View.GONE);
+                            mCrossViewWaitingToShow.put(i + "", crossLine);
+                            break;
+                        }
+                    }
+                }
             }
         }
+        mNeedTopLeftAndRightRadusIndexMark = 0;
+        mNeedBottomLeftAndRightRadusIndexMark = mTextViewList.size() - 1;
+        resetTheSelector();
     }
 
     /**
@@ -472,21 +690,6 @@ public class MiddleLinesDialog extends Dialog implements
                 mScreenSize.x - mMarginLeftAndRight - mMarginLeftAndRight,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
         textView.setLayoutParams(layoutParams);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            textView.setBackground(newSelector(
-                    android.R.color.transparent,
-                    getColorByHexStr(mMiddleLinesDiaglogPressColorStr),
-                    android.R.color.transparent,
-                    android.R.color.transparent,
-                    index, size));
-        } else {
-            textView.setBackgroundDrawable(newSelector(
-                    android.R.color.transparent,
-                    getColorByHexStr(mMiddleLinesDiaglogPressColorStr),
-                    android.R.color.transparent,
-                    android.R.color.transparent,
-                    index, size));
-        }
         if (Gravity.LEFT == gravity) {
             textView.setPadding(mPaddingLeftOrRight, mItemPaddingTopAndDown, 0, mItemPaddingTopAndDown);
         } else if (Gravity.RIGHT == gravity) {
@@ -516,11 +719,6 @@ public class MiddleLinesDialog extends Dialog implements
         return view;
     }
 
-    @Override
-    public void onClick(View v) {
-
-    }
-
     /**
      * 不想要效果就传入-1
      *
@@ -532,28 +730,35 @@ public class MiddleLinesDialog extends Dialog implements
      */
     public StateListDrawable newSelector(int idColorNormal, int idColorPressed,
                                          int idColorFocused, int idColorUnable,
-                                         int index, int size) {
+                                         int index) {
         Drawable normal = null;
         Drawable pressed = null;
         Drawable focused = null;
         Drawable unable = null;
         int topLeftAndRightRadius = dip2px(getContext(), mTopLeftAndRightRadius);
         int bottomLeftAndRightRadius = dip2px(getContext(), mBottomLeftAndRightRadius);
-        if (index == 0) {//第一个需要上左 上右的角落需要圆角
-            normal = createDrawable(topLeftAndRightRadius, 0, idColorNormal);
-            pressed = createDrawable(topLeftAndRightRadius, 0, idColorPressed);
-            focused = createDrawable(topLeftAndRightRadius, 0, idColorFocused);
-            unable = createDrawable(topLeftAndRightRadius, 0, idColorUnable);
-        } else if (index == size - 1) {//最后一个需要下左 下右的角落需要圆角
-            normal = createDrawable(0, bottomLeftAndRightRadius, idColorNormal);
-            pressed = createDrawable(0, bottomLeftAndRightRadius, idColorPressed);
-            focused = createDrawable(0, bottomLeftAndRightRadius, idColorFocused);
-            unable = createDrawable(0, bottomLeftAndRightRadius, idColorUnable);
+        if (mNeedTopLeftAndRightRadusIndexMark != mNeedBottomLeftAndRightRadusIndexMark) {
+            if (index == mNeedTopLeftAndRightRadusIndexMark) {//第一个上左 上右的角落需要圆角
+                normal = createDrawable(topLeftAndRightRadius, 0, idColorNormal);
+                pressed = createDrawable(topLeftAndRightRadius, 0, idColorPressed);
+                focused = createDrawable(topLeftAndRightRadius, 0, idColorFocused);
+                unable = createDrawable(topLeftAndRightRadius, 0, idColorUnable);
+            } else if (index == mNeedBottomLeftAndRightRadusIndexMark) {//最后一个下左 下右的角落需要圆角
+                normal = createDrawable(0, bottomLeftAndRightRadius, idColorNormal);
+                pressed = createDrawable(0, bottomLeftAndRightRadius, idColorPressed);
+                focused = createDrawable(0, bottomLeftAndRightRadius, idColorFocused);
+                unable = createDrawable(0, bottomLeftAndRightRadius, idColorUnable);
+            } else {
+                normal = createDrawable(0, 0, idColorNormal);
+                pressed = createDrawable(0, 0, idColorPressed);
+                focused = createDrawable(0, 0, idColorFocused);
+                unable = createDrawable(0, 0, idColorUnable);
+            }
         } else {
-            normal = createDrawable(0, 0, idColorNormal);
-            pressed = createDrawable(0, 0, idColorPressed);
-            focused = createDrawable(0, 0, idColorFocused);
-            unable = createDrawable(0, 0, idColorUnable);
+            normal = createDrawable(topLeftAndRightRadius, bottomLeftAndRightRadius, idColorNormal);
+            pressed = createDrawable(topLeftAndRightRadius, bottomLeftAndRightRadius, idColorPressed);
+            focused = createDrawable(topLeftAndRightRadius, bottomLeftAndRightRadius, idColorFocused);
+            unable = createDrawable(topLeftAndRightRadius, bottomLeftAndRightRadius, idColorUnable);
         }
         return newSelector(normal, pressed, focused, unable);
     }
@@ -609,6 +814,7 @@ public class MiddleLinesDialog extends Dialog implements
     @Override
     public void dismiss() {
         super.dismiss();
+        MiddleLinesDialogUtils.remove(mResIdDialogBelongTo);
         this.mActionClickListener.onClose(mResIdDialogBelongTo);
     }
 
@@ -625,6 +831,7 @@ public class MiddleLinesDialog extends Dialog implements
     @Override
     public void cancel() {
         super.cancel();
+        MiddleLinesDialogUtils.remove(mResIdDialogBelongTo);
         this.mActionClickListener.onCancel(this, mResIdDialogBelongTo);
     }
 
