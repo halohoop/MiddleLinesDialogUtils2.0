@@ -93,13 +93,9 @@ To customize dialog style:
   * Android GINGERBREAD 2.3+
 
 # Changelog
-### Version: 1.1
+### Version: 2.0.1
 
-  * add a param of View Id for marking the dialog's owner; 
-
-### Version: 1.0
-
-  * Initial Build
+  * update:to show serveral line when sth is done is non-ui thread; 
 
 ## License
 
