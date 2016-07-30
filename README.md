@@ -7,7 +7,7 @@ Use just one line code to get a Custum Dialog in Android!
 Feel free and help yourself!
 ## 
 # Sample Pictures
-
+![Markdown](http://i4.piimg.com/8359/982d53b5a0f7a127.gif)
 ![Markdown](http://i4.piimg.com/8359/d7b105b029635df4.jpg)
 ![Markdown](http://i4.piimg.com/8359/7dac0b579ba21ef5.jpg)
 ![Markdown](http://i4.piimg.com/8359/bfff4e23bdf9648c.jpg)
@@ -16,6 +16,7 @@ Feel free and help yourself!
 ![Markdown](http://i4.piimg.com/8359/5bfc4381d23f0d35.jpg)
 ## 
 # Usage
+* compile 'com.halohoop:middlelinesdialogutilslib:2.0.1'
 <pre><code>
         //使用示例,一行代码一句对话框,示例示例示例示例示例,参数越多,越多自定义
         //sample to use,use just one line of code to open a dialog;
@@ -56,6 +57,29 @@ Feel free and help yourself!
                 this,//对话框取消监听回调
                 //以下为设置每一行的文字
                 "上传封面", "转发", "拍照", "录像", "需要再往后加...");
+	//--------------------------------------------------
+	//--------------------------------------------------
+	//--------------------------------------------------
+	//or when you want several line to show after sth is done in non-ui thread;
+    MiddleLinesDialogUtils.show(view.getId(), this, 20, 30,
+            20, 20,
+            0,
+            1.0f, "ffffff",
+            0.3f, "000000",
+            1.0f, "000000",
+            Gravity.CENTER, 10,
+            this,
+            new int[]{0, 2},
+            "Upload File", "Take Picture", "Parse The QRcode from Picture");
+    new Thread(new Runnable() {
+        @Override
+        public void run() {
+            SystemClock.sleep(2000);//simulation of sth is done in thread!
+            MiddleLinesDialogUtils.showItemByIndex(view.getId(), 0);
+            SystemClock.sleep(2000);//simulation of sth is done in thread!
+            MiddleLinesDialogUtils.showItemByIndex(view.getId(), 2);
+        }
+    }).start();
 </code></pre>
 
 # Customization
