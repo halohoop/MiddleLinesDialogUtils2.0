@@ -87,24 +87,6 @@ public class MiddleLinesDialog extends Dialog {
                 actionClickListener,
                 texts);
     }
-
-    /**
-     * 这个构造函数的文字参数,由外界传入,采用的是不定参数的形式,其实就是一个数组,
-     * 使用默认的圆角和margin
-     *
-     * @param context
-     * @param actionClickListener
-     * @param texts
-     */
-    public MiddleLinesDialog(int resIdDialogBelongTo, Context context, ActionClickListener actionClickListener,
-                             int[] waitingToShowMark,
-                             String... texts) {
-        this(resIdDialogBelongTo, context,
-                DEFAULT_MARGIN_LEFT_AND_RIGHT, DEFAULT_ITEM_PADDING_TOP_AND_DOWN,
-                DEFAULT_RADOIS, DEFAULT_RADOIS,
-                actionClickListener,
-                texts);
-    }
     //----------------------↑--------------------------
 
     public MiddleLinesDialog(int resIdDialogBelongTo, Context context,

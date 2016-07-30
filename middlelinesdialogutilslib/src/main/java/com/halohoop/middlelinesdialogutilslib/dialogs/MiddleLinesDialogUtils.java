@@ -19,17 +19,6 @@ public class MiddleLinesDialogUtils {
         dialogMap.put(resIdDialogBelongTo, middleLinesDialog);
     }
 
-    public static void show(int resIdDialogBelongTo, Context context, ActionClickListener actionClickListener,
-                            int[] waitingToShowMark,
-                            String... texts) {
-        MiddleLinesDialog middleLinesDialog = new MiddleLinesDialog(resIdDialogBelongTo, context,
-                actionClickListener,
-                waitingToShowMark,
-                texts);
-        middleLinesDialog.show();
-        dialogMap.put(resIdDialogBelongTo, middleLinesDialog);
-    }
-
     //--------------------------------↑-------------------------------
     //---------------------------------↓------------------------------
     public static void show(int resIdDialogBelongTo, Context context, int marginLeftAndRight,
