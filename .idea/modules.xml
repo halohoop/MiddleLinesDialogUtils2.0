@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/MiddleLinesDialogUtils2.0.iml" filepath="$PROJECT_DIR$/MiddleLinesDialogUtils2.0.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dialog-example/dialog-example.iml" filepath="$PROJECT_DIR$/dialog-example/dialog-example.iml" />
+      <module fileurl="file://$PROJECT_DIR$/middlelinesdialogutilslib/middlelinesdialogutilslib.iml" filepath="$PROJECT_DIR$/middlelinesdialogutilslib/middlelinesdialogutilslib.iml" />
+    </modules>
+  </component>
+</project>
